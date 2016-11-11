@@ -24,10 +24,9 @@ Hints at the bottom of this file.
     var app = angular.module("hero-vs-dragon", []);
 
     app.controller("HeroVSDragonController", function($scope) {
-      var heroHealth = $scope.heroHealth;
-      heroHealth = 10;
-      var dragonHealth = $scope.dragonHealth;
-      dragonHealth = 20;
+      $scope.heroHealth = 10;
+      $scope.dragonHealth = 20;
+      $scope.gameover = false;
       $scope.message = '';
 
       $scope.fight = function() {
@@ -35,23 +34,24 @@ Hints at the bottom of this file.
 
         console.log(num);
         if (num > 0.5) {
-          heroHealth = heroHealth - 5;
-          $scope.message = "The hero's health is " + heroHealth;
-          if (heroHealth <= 0) {
-            $scope.message = "The hero is dead :( ";
-          }
+          $scope.heroHealth = $scope.heroHealth - 5;
+
         } else {
-          dragonHealth = dragonHealth - 5;
-          $scope.message = "The dragon's health is " + dragonHealth;
-          if (dragonHealth <= 0) {
-            $scope.message = "The dragon is dead. YAY!  :) ";
-          }
+          $scope.dragonHealth = $scope.dragonHealth - 5;
+        }
+        if ($scope.heroHealth <= 0 || $scope.dragonHealth <= 0) {
+          $scope.gameover = true;
         }
       }
 
       $scope.flight = function() {
-        heroHealth = heroHealth + 2;
-        $scope.message = "The hero gains 2 health points. The hero's health is " + heroHealth;
+        $scope.heroHealth = $scope.heroHealth + 2;
+      }
+
+      $scope.restart = function() {
+        $scope.gameover = false;
+        $scope.heroHealth = 10;
+        $scope.dragonHealth = 20;
       }
     });
 
@@ -59,9 +59,24 @@ Hints at the bottom of this file.
   </head>
   <body>
     <div style="margin:50px;" ng-app="hero-vs-dragon" ng-controller="HeroVSDragonController">
-      <button ng-click="fight()"> Fight </button>
-      <button ng-click="flight()"> Flight </button><br><br>
-      {{ message }}
+      Hero's health: {{ heroHealth }}<br>
+      Dragon's health: {{ dragonHealth }}<br>
+      <br>
+      <div class="win-banner" ng-show="dragonHealth <= 0">
+        You win! The dragon is dead. YAY!  :)
+      </div>
+      <div class="loser-banner" ng-show="heroHealth <= 0">
+        You lose! The hero is dead :(
+      </div>
+      <br>
+      <br>
+      <div ng-hide="gameover">
+        <button ng-click="fight()"> Fight </button>
+        <button ng-click="flight()"> Flight </button><br><br>
+      </div>
+      <div ng-show="gameover">
+        <button ng-click="restart()">Play again</button>
+      </div>
 
     </div>
   </body>
