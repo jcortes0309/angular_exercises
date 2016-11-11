@@ -12,6 +12,11 @@ immediately - as they type - says Hello back to them and reports the number of c
   </head>
   <body>
     <!-- write AngularJS template code here -->
+    <div ng-app>
+      What is your name?
+      <input type="text" ng-model="name"><br>
+      <label>Hello, {{ name }}! There are {{ name.replace(" ", "").length }} letters in your name.</label>
+    </div>
   </body>
 </html>
 

@@ -21,43 +21,49 @@ Hints at the bottom of this file.
     <title>Fight or Flight</title>
     <script src="angular.js"></script>
     <script>
-    var app = angular.module('my-app', []);
-    app.controller('MainController', function($scope) {
-      $scope.dragonHealth = 20;
-      $scope.heroHealth = 10;
+    var app = angular.module("hero-vs-dragon", []);
+
+    app.controller("HeroVSDragonController", function($scope) {
+      var heroHealth = $scope.heroHealth;
+      heroHealth = 10;
+      var dragonHealth = $scope.dragonHealth;
+      dragonHealth = 20;
+      $scope.message = '';
 
       $scope.fight = function() {
         var num = Math.random();
+
+        console.log(num);
         if (num > 0.5) {
-          $scope.dragonHealth -= 5;
+          heroHealth = heroHealth - 5;
+          $scope.message = "The hero's health is " + heroHealth;
+          if (heroHealth <= 0) {
+            $scope.message = "The hero is dead :( ";
+          }
         } else {
-          $scope.heroHealth -= 5;
-        }
-        checkWinner();
-      };
-
-      $scope.flight = function() {
-        $scope.heroHealth += 2;
-        checkWinner();
-      };
-
-      function checkWinner() {
-        if ($scope.dragonHealth <= 0) {
-          $scope.message = 'You win!';
-        }
-        if ($scope.heroHealth <= 0){
-          $scope.message = 'You lose!';
+          dragonHealth = dragonHealth - 5;
+          $scope.message = "The dragon's health is " + dragonHealth;
+          if (dragonHealth <= 0) {
+            $scope.message = "The dragon is dead. YAY!  :) ";
+          }
         }
       }
+
+      $scope.flight = function() {
+        heroHealth = heroHealth + 2;
+        $scope.message = "The hero gains 2 health points. The hero's health is " + heroHealth;
+      }
     });
+
     </script>
   </head>
-  <body ng-app="my-app" ng-controller="MainController">
-    Hero: {{heroHealth}}<br>
-    Dragon: {{dragonHealth}}
-    {{ message }}
-    <button ng-click="fight()">Fight</button>
-    <button ng-click="flight()">Flight</button>
+  <body>
+    <div style="margin:50px;" ng-app="hero-vs-dragon" ng-controller="HeroVSDragonController">
+      <button ng-click="fight()"> Fight </button>
+      <button ng-click="flight()"> Flight </button><br><br>
+      {{ message }}
+
+    </div>
   </body>
 </html>
 
