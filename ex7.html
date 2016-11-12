@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!--
 Bonus: Make a Todo List part 2
 
@@ -8,3 +9,56 @@ Add these features to your todo list:
 
 Hints at the bottom of this file.
 -->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Todo List</title>
+    <script src="angular.js"></script>
+    <style>
+    .done { text-decoration: line-through; }
+    </style>
+    <script>
+    // Write JS code here
+    var app = angular.module("my-app", []);
+
+    app.controller("ToDoListController", function($scope) {
+      $scope.tasks = [
+
+      ];
+      $scope.addTask  = function() {
+        $scope.tasks.push(
+          { description: $scope.newTask }
+        );
+        $scope.newTask = "";
+      }
+
+      $scope.removeTask = function(index) {
+        $scope.tasks.splice(index, 1);
+      }
+
+      $scope.showTasks = function() {
+        $scope.tasks.forEach(function(task) {
+          console.log(task.description, ", done: ", task.done);
+        })
+      }
+    });
+    </script>
+  </head>
+  <body>
+    <div ng-app="my-app" ng-controller="ToDoListController">
+      <form ng-submit="addTask()">
+        <input type="text" ng-model="newTask">
+        <button type="submit">Add</button>
+        <!-- <button type="submit">Show Tasks</button> -->
+      </form>
+      <ul>
+        <li ng-repeat="task in tasks" ng-class="{done: task.done}">
+          <input type="checkbox" ng-model="task.done" ng-click="showTasks()">
+          {{ task.description }}
+          <button ng-click="removeTask($index)">Remove</button>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
